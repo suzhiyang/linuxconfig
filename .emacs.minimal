@@ -68,6 +68,46 @@
   (c-set-style "MyCppStyle"))
 (add-hook 'c++-mode-hook 'MyCppHook)
 
+;; Auto-insert
+(eval-after-load 'autoinsert
+    '(define-auto-insert
+       '("\\.\\([Hh]\\|hh\\|hpp\\)\\'" . "C/C++ header")
+       '("Header skeleton."
+         "/** \n * "
+         (file-name-nondirectory (buffer-file-name))
+         "\n * Author: Zhiyang Su"
+         "\n * Created on " (format-time-string "%Y-%m-%d.")
+         "\n */ \n\n"
+         "#ifndef "
+         (upcase (concat (file-name-nondirectory
+                          (file-name-sans-extension buffer-file-name))
+                         "_"
+                         (file-name-extension buffer-file-name)))
+         "\n#define "
+         (upcase (concat (file-name-nondirectory
+                          (file-name-sans-extension buffer-file-name))
+                         "_"
+                         (file-name-extension buffer-file-name))) \n
+         _
+         "\n\n#endif")))
+(eval-after-load 'autoinsert
+    '(define-auto-insert
+       '("\\.\\(CC?\\|cc\\|c\\|cxx\\|cpp\\|c++\\)\\'" . "C/C++ skeleton")
+       '("Cpp files skeleton."
+         "/** \n * "
+         (file-name-nondirectory (buffer-file-name))
+         "\n * Author: Zhiyang Su"
+         "\n * Created on " (format-time-string "%Y-%m-%d.")
+         "\n */ \n\n"
+         "#include \""
+         (file-name-sans-extension
+          (file-name-nondirectory (buffer-file-name)))
+         ".h\"" \n
+         _
+         )))
+
+
+
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 (setq visible-bell t)
